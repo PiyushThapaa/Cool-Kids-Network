@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -25,6 +25,6 @@ jobs:
       # Frontend Linter
       - name: Install frontend dependencies and run linter
         run: |
-          cd frontend
+          cd Frontend
           npm install
           npm run lint
