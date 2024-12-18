@@ -1,5 +1,5 @@
-import { User } from "./models/user";
-
+import { User } from "./models/user.js";
+import errorHandler from "./Middlewares/error.js"
 
 //Login controller
 
