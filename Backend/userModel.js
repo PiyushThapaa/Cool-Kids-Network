@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
         enum:["Cool Kid","Cooler Kid","Coolest Kid"],
         default:"Cool Kid"
     }
+},
+{
+    timestamps:true
 })
 
 export const User = mongoose.model("User", userSchema)
