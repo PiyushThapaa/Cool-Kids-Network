@@ -40,7 +40,9 @@ export const logout = (req,res,next)=>{
     try {
         res.status(200).cookie("token","",{
             expires : new Date(Date.now()),
+            // eslint-disable-next-line no-undef
             sameSite:process.env.NODE_ENV === "development" ? "lax" : "none",
+            // eslint-disable-next-line no-undef
             secure:process.env.NODE_ENV === "development" ? false : true
         }).json({
             success:true,

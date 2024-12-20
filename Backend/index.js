@@ -27,6 +27,7 @@ app.get("/api/user",isAuthenticated,userData)
 app.get("/api/allusers",isAuthenticated,allUsers)
 app.post("/api/changerole",isAuthenticated,changeRole)
 
+// eslint-disable-next-line no-undef
 const port = process.env.PORT || 5000;
 connectDB();
 
