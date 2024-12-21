@@ -1,6 +1,50 @@
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../main";
+import toast from "react-hot-toast";
+import validator from "validator"
+import axios from "axios";
 
 const Register = () => {
+  const {setRecheck} = useContext(Context)
+  const Navigate = useNavigate()
+
+  const [email,setEmail] = useState("");
+  const [firstName,setFirstname] = useState("");
+  const [lastName,setLastname] = useState("");
+  const [country,setCountry] = useState("");
+
+  const registerHandler = async() => {
+    if (email=="") {
+      toast.error("Enter the Email")
+      return
+    }
+    if (!validator.isEmail(email)) {
+      toast.error("Enter a valid Email")
+      return
+    }
+    await axios.get('https://randomuser.me/api/')
+    .then(res=>{
+      const result = res.data.results[0]
+      setFirstname(result.name.first)
+      setLastname(result.name.last)
+      setCountry(result.location.country)
+    })
+    axios.post(`${import.meta.env.VITE_SERVER}/register`,{
+      firstName,
+      lastName,
+      country,
+      email
+    },{
+      withCredentials:true
+    }).then((res)=>{
+      toast.success(res.data.message)
+      setRecheck(prev=>!prev)
+      Navigate("/")
+    }).catch(err=>{
+      toast.error(err.response.data.message)
+    })
+  }
     return (
       <div style={styles.container}>
         <header style={styles.header}>
@@ -11,9 +55,11 @@ const Register = () => {
           <input
             type="email"
             placeholder="Enter your email"
+            value={email}
             style={styles.input}
+            onChange={(e)=>setEmail(e.target.value)}
           />
-          <button style={styles.button}>Confirm</button>
+          <button style={styles.button} onClick={registerHandler}>Confirm</button>
           <p style={styles.linkContainer}>
             Already have an account?{" "}
             <Link to={"/login"} style={styles.link}>Login Here</Link>
@@ -29,7 +75,7 @@ const Register = () => {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      minHeight: "100vh",
+      marginTop:"150px",
       fontFamily: "Arial, sans-serif",
     },
     header: {

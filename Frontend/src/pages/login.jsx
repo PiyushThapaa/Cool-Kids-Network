@@ -1,6 +1,37 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../main";
+import toast from "react-hot-toast";
+import validator from "validator"
 
 const Login = () => {
+  const {setRecheck} = useContext(Context)
+  const Navigate = useNavigate()
+
+  const [email,setEmail] = useState("");
+
+  const loginHandler = () => {
+    if (email=="") {
+      toast.error("Enter the Email")
+      return
+    }
+    if (!validator.isEmail(email)) {
+      toast.error("Enter a valid Email")
+      return
+    }
+    axios.post(`${import.meta.env.VITE_SERVER}/login`,{
+      email
+    },{
+      withCredentials:true
+    }).then((res)=>{
+      toast.success(res.data.message)
+      setRecheck(prev=>!prev)
+      Navigate("/")
+    }).catch(err=>{
+      toast.error(err.response.data.message)
+    })
+  }
   return (
     <div style={styles.container}>
       <header style={styles.header}>
@@ -12,8 +43,10 @@ const Login = () => {
           type="email"
           placeholder="Enter your email"
           style={styles.input}
+          value={email}
+          onChange={(e)=>{setEmail(e.target.value)}}
         />
-        <button style={styles.button}>Confirm</button>
+        <button style={styles.button} onClick={loginHandler}>Confirm</button>
         <p style={styles.linkContainer}>
           Don’t have an account?{" "}
           <Link to={"/register"} style={styles.link}>Register Here</Link>
@@ -29,7 +62,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    minHeight: "100vh",
+    marginTop:"150px",
     fontFamily: "Arial, sans-serif",
   },
   header: {

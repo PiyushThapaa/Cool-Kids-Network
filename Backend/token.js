@@ -5,7 +5,7 @@ export const sendCookie = (user, res, message, statusCode = 200) => {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
     res.status(statusCode).cookie("token", token, {
         httpOnly: true,
-        maxAge:60*60*1000, //60 mins
+        maxAge:2*60*60*1000, //2 hrs
         // eslint-disable-next-line no-undef
         sameSite:process.env.NODE_ENV === "development" ? "lax" : "none",
         // eslint-disable-next-line no-undef

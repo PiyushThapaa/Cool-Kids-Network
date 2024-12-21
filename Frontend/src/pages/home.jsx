@@ -1,11 +1,38 @@
+import { useContext, useEffect, useState } from "react";
+import { Context } from "../main";
+import { useNavigate } from "react-router-dom";
+import axios from "axios"
+import toast from "react-hot-toast";
+
 const Home = () => {
-  const user = {
-    firstName: "John",
-    lastName: "Doe",
-    country: "USA",
-    email: "johndoe@example.com",
-    role: "Administrator",
-  };
+
+  const Navigate = useNavigate()
+  const {setRole,setRecheck} = useContext(Context)
+  const [user,setUser] = useState({})
+  useEffect(()=>{
+    axios.get(`${import.meta.env.VITE_SERVER}/me`,{
+      withCredentials:true
+    })
+    .then((res)=>{
+      setUser(res.data.user);
+      setRole(res.data.user.role)
+    })
+    .catch((err)=>{
+      console.log(err.response.data.message);
+      Navigate("/login");
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
+  const logoutHandler = () => {
+    axios.get(`${import.meta.env.VITE_SERVER}/logout`,{
+      withCredentials:true
+    }).then(()=>{
+      toast.success("Logged Out Successfully")
+      Navigate("/login")
+      setRecheck(prev=>!prev)
+    }).catch(err=>toast.error(err.response.data.message))
+  }
 
   return (
     <div style={styles.container}>
@@ -20,7 +47,7 @@ const Home = () => {
           <p><strong>Role:</strong> {user.role}</p>
         </div>
       </div>
-      <button style={styles.logoutButton}>Logout</button>
+      <button style={styles.logoutButton} onClick={logoutHandler}>Logout</button>
     </div>
   );
 };
@@ -32,7 +59,7 @@ const styles = {
     gap:'17px',
     marginTop:'56px',
     alignItems: "center",
-    height: "80vh"
+    height:0
   },
   card: {
     backgroundColor: "#fff",

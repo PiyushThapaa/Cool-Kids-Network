@@ -14,7 +14,12 @@ config({
 const app = express();
 
 //Middlewares
-app.use(cors())
+app.use(cors({
+    // eslint-disable-next-line no-undef
+    origin:[process.env.FRONTEND_URL],
+    methods:["GET","POST","PUT","DELETE"],
+    credentials:true
+}))
 app.use(express.json())
 app.use(cookieParser())
 // app.use(express.urlencoded())
@@ -23,9 +28,9 @@ app.use(cookieParser())
 app.post("/api/register",register)
 app.post("/api/login",login)
 app.get("/api/logout",logout)
-app.get("/api/user",isAuthenticated,userData)
+app.get("/api/me",isAuthenticated,userData)
 app.get("/api/allusers",isAuthenticated,allUsers)
-app.post("/api/changerole",isAuthenticated,changeRole)
+app.put("/api/changerole",isAuthenticated,changeRole)
 
 // eslint-disable-next-line no-undef
 const port = process.env.PORT || 5000;
