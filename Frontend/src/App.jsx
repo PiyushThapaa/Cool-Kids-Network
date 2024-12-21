@@ -21,10 +21,10 @@ const App = () => {
       }
     }
     appState()
-    // window.addEventListener('popstate',appState)
-    //   return () => {
-    //     window.removeEventListener('popstate', appState);
-    //   };
+    window.addEventListener('popstate',appState)
+      return () => {
+        window.removeEventListener('popstate', appState);
+      };
   },[recheck])
   return (
     <>
