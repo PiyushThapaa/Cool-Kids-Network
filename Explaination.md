@@ -22,7 +22,7 @@ Make an user-managament website that have following features:
   
 
 ## Technical Specification and Decisions
-1.` Authentication` : Used JWT (JSON Web Token) for Authentication as it is a stateless authentication method . 
+1. `Authentication` : Used JWT (JSON Web Token) for Authentication as it is a stateless authentication method . 
 2. `Email Verification` : Used validator package to validate emails for both frontend and backend.
 3. `API Testing` : Tested API's with postman.
 4. `Frontend UI` : Beautiful UI made with React.js.
